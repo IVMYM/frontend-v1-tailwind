@@ -1,26 +1,14 @@
-import axios from 'axios';
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000';
+import axios from 'axios'
 
 const client = axios.create({
-  baseURL: API_BASE,
-  timeout: 10000,
-});
+  baseURL: process.env.NEXT_PUBLIC_API_BASE || 'http://127.0.0.1:8000',
+  timeout: 8000,
+})
 
-export async function getDashboardStats() {
-  try {
-    const r = await client.get('/dashboard/stats');
-    return r.data;
-  } catch (e) {
-    return { users: 0, db: 0, tasks: 0 };
-  }
-}
+client.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token')
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
 
-export async function getUsers() {
-  const r = await client.get('/api/auth/admin/users');
-  return r.data;
-}
-
-export async function dbInspect(q='') {
-  const r = await client.get('/api/db-inspect/proxy', { params: { q } });
-  return r.data;
-}
+export default client
