@@ -10,8 +10,12 @@ export default function Table({columns, data}:{columns:{key:string,label:string}
           </tr>
         </thead>
         <tbody>
-          {data.map((row, idx)=>(
+          {/* 关键修复：在映射之前过滤掉 null 或 undefined 的行 */}
+          {data
+            .filter(row => row !== null && row !== undefined) // <--- 添加过滤逻辑
+            .map((row, idx)=>(
             <tr key={idx} className="border-b hover:bg-gray-50">
+              {/* 这里的 row 确保是一个对象了 */}
               {columns.map(c=> <td key={c.key} className="p-3 text-sm">{String(row[c.key] ?? '')}</td>)}
             </tr>
           ))}

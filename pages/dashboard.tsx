@@ -1,5 +1,5 @@
 import Layout from '@/components/Layout'
-import { dbInspect } from '@/services/db'
+import  {dbInspect}  from '@/pages/db/inspection'
 import { useEffect, useState } from 'react'
 import { showToast } from '@/components/Toast'
 
