@@ -1,14 +1,25 @@
-import axios from './api'
-
-// 登录函数
+import axios from 'axios'
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000'
 export async function login(username: string, password: string) {
-  // 构造表单数据
-  const params = new URLSearchParams()
-  params.append('username', username)
-  params.append('password', password)
+  const formData = new URLSearchParams()
+  formData.append('username', username)
+  formData.append('password', password)
 
-  const res = await axios.post('/api/auth/token', params, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+  const res = await axios.post(`${API_BASE}/login`, formData, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
   })
+  localStorage.setItem('token', res.data.access_token)
   return res.data
+}
+
+export function getToken() {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('token');
+}
+
+export function clearToken() {
+  localStorage.removeItem('token');
+  document.cookie = 'token=; Max-Age=0; path=/;';
 }

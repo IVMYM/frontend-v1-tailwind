@@ -1,5 +1,7 @@
+'use client'
+
 import { useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { login } from '@/services/auth'
 import { showToast } from '@/components/Toast'
 
@@ -14,26 +16,26 @@ export default function LoginPage() {
     setLoading(true)
     try {
       const res = await login(username, password)
-    // 存 cookie（有效期 1 天）
+
+      // 存 cookie（有效期 1 天）
       document.cookie = `token=${res.access_token}; path=/; max-age=${24 * 60 * 60}`
-      showToast('✅ 登录成功', 'success', 1500)
-      setTimeout(() => router.push('/'), 1500)
+      debugger
+      showToast('登录成功')
+      router.push('/') // 首页路径
     } catch (err) {
-      showToast('❌ 用户名或密码错误', 'error', 2000)
+      showToast('用户名或密码错误')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <form
         onSubmit={handleLogin}
         className="bg-white shadow-xl rounded-2xl p-8 w-80 border border-gray-100"
       >
-        <h1 className="text-2xl font-semibold text-center mb-6 text-gray-800">
-          磐维数据巡检登录
-        </h1>
+        <h1 className="text-2xl font-semibold text-center mb-6 text-gray-800">系统登录</h1>
         <input
           className="w-full border rounded-lg px-3 py-2 mb-4 text-gray-700 focus:ring focus:ring-indigo-100"
           placeholder="用户名"
