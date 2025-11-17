@@ -36,100 +36,57 @@ export default function HomePage() {
     setMessages([])
     showToast('🆕 已开启新会话')
   }
-  //  const res = await fetch(`${API_BASE}/service/true_dbinspect?question=${encodeURIComponent(input)}`, {
-   const sendQuestion = async () => {
-  if (!input.trim()) return;
-  setMessages((prev) => [...prev, { role: 'user', content: input }]);
-  setInput('');
-  setLoading(true);
 
-  try {
-    const res = await fetch(`http://localhost:15678/webhook/cd4bb720-88bd-4274-9a9f-c12f7032277c?chatInput=${encodeURIComponent(input)}`,
-    // const res = await fetch(`${API_BASE}/service/true_dbinspect?question=${encodeURIComponent(input)}`, 
-      {
+  const sendQuestion = async () => {
+    if (!input.trim()) return
+    setMessages((prev) => [...prev, { role: 'user', content: input }])
+    setInput('')
+    setLoading(true)
+
+    try {
+           const res = await fetch(`${API_BASE}/service/true_dbinspect?question=${encodeURIComponent(input)}`, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
-        },
-      }
-    );
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const reader = res.body?.getReader();
-    if (!reader) throw new Error('无响应流');
-
-    // 先插入一个空的 assistant 消息
-    let aiMsgIndex = -1;
-    setMessages((prev) => {
-      aiMsgIndex = prev.length;
-      return [...prev, { role: 'assistant', content: '' }];
-    });
-
-    const decoder = new TextDecoder();
-    let buffer = '';
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      buffer += decoder.decode(value, { stream: true });
-
-      // 将缓冲区切分为多行
-      const lines = buffer.split(/\r?\n/);
-      buffer = lines.pop() || ''; // 保留最后一行（可能不完整）
-
-       for (const raw of lines) {
-          if (!raw.trim()) continue;
-          let s = raw.trim();
-          if (s.startsWith('data:')) s = s.replace(/^data:\s*/, '');
-
-          // 尝试解析 JSON 控制包
-          let isControlPacket = false;
-          try {
-            const obj = JSON.parse(s);
-            if (obj?.type === 'begin' || obj?.type === 'end') {
-              isControlPacket = true;
-            }
-          } catch {
-            // 不是 JSON 控制包，则是内容本体
-          }
-
-          if (isControlPacket) continue; // 忽略控制包
-
-          // 更新 AI 消息内容，只显示纯文本
-          setMessages((prev) => {
-            const updated = [...prev];
-            const current = updated[aiMsgIndex];
-            if (!current) return prev;
-            updated[aiMsgIndex] = {
-              ...current,
-              content: (current.content || '') + JSON.parse(s).content,
-            };
-            return updated;
-          });
-
-          chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' });
-}
-
-    }
-
-    // 最后一次缓冲区内容
-    if (buffer.trim()) {
-      setMessages((prev) => {
-        const updated = [...prev];
-        const current = updated[aiMsgIndex];
-        updated[aiMsgIndex] = { ...current, content: current.content + buffer.trim() };
-        return updated;
+        }
+    
       });
-    }
-  } catch (err) {
-    console.error(err);
-    setMessages((prev) => [...prev, { role: 'system', content: '⚠️ 连接失败，请检查 Token 或网络' }]);
-  } finally {
-    setLoading(false);
-  }
-};
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const reader = res.body?.getReader()
+      if (!reader) throw new Error('无响应流')
 
+      let aiMsg = { role: 'assistant', content: '' }
+      setMessages((prev) => [...prev, aiMsg])
+
+      const decoder = new TextDecoder()
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        const chunk = decoder.decode(value);
+
+        // 处理 SSE 的 "data:" 前缀
+        const lines = chunk.split(/\r?\n/).filter((line) => line.startsWith('data:'));
+        for (const line of lines) {
+          const text = line.replace(/^data:\s*/, '');
+          aiMsg.content += text;
+        }
+
+        setMessages((prev) => {
+          const updated = [...prev]
+          updated[updated.length - 1] = { ...aiMsg }
+          return updated
+        })
+          // 自动滚动到底部
+        chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: 'smooth' });
+      }
+    } catch (err) {
+      console.error(err)
+      setMessages((prev) => [...prev, { role: 'system', content: '⚠️ 连接失败，请检查Token或网络' }])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div

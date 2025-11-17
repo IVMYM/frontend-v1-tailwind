@@ -1,0 +1,25 @@
+ 
+ 
+ 
+ 
+ 
+/* login */
+.lxzs-login{position: fixed; transform: translate(-50%,-50%); top: 50%; left: 50%; z-index: 100;}
+.lxzs-login-box{width: 360px; height: 400px; background: linear-gradient(160deg, #CADBFE, #fff,#fff); border-radius: 15px; box-shadow: 0 4px 30px rgba(0,0,0,.15);}
+.lxzs-login-main{width: 100%; height: 100%; padding: 24px; box-sizing: border-box; position: relative;}
+.lxzs-login-main a.delete{display: inline-block; width: 15px; height: 15px; background: url(../images/path_delete.svg) no-repeat center; background-size: 13px; float: right; cursor: pointer;}
+.lxzs-login-main .logo{width: 138px; height: 60px; margin: 0 auto; background: url(../images/logo_blue.svg) no-repeat center; background-size: 110px;}
+.lxzs-login-main .detailcon{width: 100%; height: auto; overflow: hidden; margin-top: 5px;}
+.lxzs-login-main  ul.detailcon-ul li{width: 100%; margin-top: 20px; position: relative;}
+.lxzs-login-main  ul.detailcon-ul li input.lxzs-login-info{width: 100%; height: 36px; border: 1px solid #C4D7FE; border-radius: 5px; box-sizing: border-box; transition: all .2s;}
+.lxzs-login-main  ul.detailcon-ul li input.lxzs-login-info:focus{border-color: #1384FA;}
+.lxzs-login-main  ul.detailcon-ul li input.account{padding: 0 10px 0 35px; background: #fff url(../images/path_number.svg) no-repeat left; background-size: 14px; background-position-x: 10px;}
+.lxzs-login-main  ul.detailcon-ul li input.password{padding: 0 10px 0 35px; background: #fff url(../images/path_password.svg) no-repeat left; background-size: 13px; background-position-x: 10px;}
+.lxzs-login-main  ul.detailcon-ul li input.eyes{width: 15px; height: 15px; background: rgba(255,255,255,0) url(../images/path_eyes.svg) no-repeat center; background-size: 15px; position: absolute; right: 10px; top: 11px;}
+.lxzs-login-main  ul.detailcon-ul li input.eyes-close{width: 15px; height: 15px; background: rgba(255,255,255,0) url(../images/path_eyesclose.svg) no-repeat center; background-size: 15px; }
+.lxzs-login-main .remember-password{width: 100%; height: auto; overflow: hidden; font-size: 12px; margin-top: 10px;}
+.lxzs-login-main .remember-password i.checkbox{display: inline-block; width: 14px; height: 14px; background: #fff; border: 1px solid #E0E0E0; border-radius: 2px; box-sizing: border-box; position: relative; top: 3px; margin-right: 7px; cursor: pointer;}
+.lxzs-login-main .remember-password i.checkbox-check{ width: 14px; height: 14px; background: #fff url(../images/path_check.svg) no-repeat center; background-size: 9px; border: 1px solid #1384FA; }
+.lxzs-login-main .btnlogin{width: 100%; height: auto; overflow: hidden; margin-top: 55px;}
+.lxzs-login-main .btnlogin input[type="button"]{width: 100%; height: 36px; background: #1384FA; border-radius: 5px; color:#fff; transition: all .2s;}
+.lxzs-login-main .btnlogin input[type="button"]:hover{background: rgba(19,132,250,.9);}

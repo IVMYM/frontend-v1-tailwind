@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Inter', sans-serif;
+  color: #1F1F1F; 
+  margin: 0; padding: 0; font-family: "microsoft yahei";
 }
 
 @keyframes fade-in {
@@ -19,4 +20,36 @@ body {
 
 .animate-fade-in {
   animation: fade-in 0.3s ease-out;
+}
+
+/* 在 globals.css 中添加 */
+@layer base {
+  * {
+    @apply m-0 p-0;
+  }
+  
+  body {
+    @apply text-[#1F1F1F];
+  }
+  
+  ul, li {
+    @apply list-none;
+  }
+  
+  a {
+    @apply no-underline;
+  }
+  
+  img {
+    @apply border-0;
+  }
+  
+  textarea {
+    @apply appearance-none resize-none border-0;
+  }
+  
+  /* 隐藏滚动条 */
+  ::-webkit-scrollbar {
+    @apply hidden;
+  }
 }

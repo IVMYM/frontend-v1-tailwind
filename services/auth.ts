@@ -1,5 +1,6 @@
 import axios from 'axios'
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000'
+const API_BASE = process.env.NEXT_PUBLIC_SERVICE_API_BASE || '/api'
+console.log('API_BASE:', process.env.NEXT_PUBLIC_SERVICE_API_BASE);
 export async function login(username: string, password: string) {
   const formData = new URLSearchParams()
   formData.append('username', username)

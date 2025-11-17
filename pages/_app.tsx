@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    const publicPages = ['/login']
+    const publicPages = ['/login','/register']
     const path = router.pathname
     if (!token && !publicPages.includes(path)) {
       router.push('/login')
